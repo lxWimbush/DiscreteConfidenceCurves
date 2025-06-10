@@ -63,8 +63,8 @@ binomial_curve = Binomial(k=7, n=10)
 possibility_at_0_6 = binomial_curve.possibility(0.6)
 print(f"Possibility of p=0.6: {possibility_at_0_6:.4f}")
 
-# Get the 0.9-alpha cut (90% confidence interval)
-lower_bound, upper_bound = binomial_curve.cut(0.9)
+# Get the alpha=1-0.9 cut (90% confidence interval)
+lower_bound, upper_bound = binomial_curve.cut(1-0.9)
 print(f"90% Confidence Interval for p: [{lower_bound:.4f}, {upper_bound:.4f}]")
 
 # Possibility of an interval [0.5, 0.7]
@@ -86,9 +86,9 @@ poisson_curve = Poisson(k=5)
 possibility_at_4_0 = poisson_curve.possibility(4.0)
 print(f"Possibility of lambda=4.0: {possibility_at_4_0:.4f}")
 
-# Get the 0.95-alpha cut (95% confidence interval)
-lower_bound, upper_bound = poisson_curve.cut(0.95)
-print(f"95% Confidence Interval for lambda: [{lower_bound:.4f}, {upper_bound:.4f}]")
+# Get the alpha=1-0.9 cut (90% confidence interval)
+lower_bound, upper_bound = poisson_curve.cut(1-0.9)
+print(f"90% Confidence Interval for lambda: [{lower_bound:.4f}, {upper_bound:.4f}]")
 ```
 ### 3. Negative Binomial Confidence Curve
 Estimate the probability of success ($p$) given a fixed number of successes ($k$) and the observed number of trials ($n$) required to achieve them.
@@ -105,8 +105,8 @@ negative_binomial_curve = NegativeBinomial(k=5, n=12)
 possibility_at_0_4 = negative_binomial_curve.possibility(0.4)
 print(f"Possibility of p=0.4 (Negative Binomial): {possibility_at_0_4:.4f}")
 
-# Get the 0.9-alpha cut
-lower_bound, upper_bound = negative_binomial_curve.cut(0.9)
+# Get the alpha=1-0.9 cut (90% confidence interval)
+lower_bound, upper_bound = negative_binomial_curve.cut(1-0.9)
 print(f"90% Confidence Interval for p (Negative Binomial): [{lower_bound:.4f}, {upper_bound:.4f}]")
 ```
 
@@ -125,9 +125,9 @@ arrested_nb_curve = ArrestedNegativeBinomial(k=3, n=8, max_k=3, max_n=10)
 possibility_at_0_35 = arrested_nb_curve.possibility(0.35)
 print(f"Possibility of p=0.35 (Arrested NB): {possibility_at_0_35:.4f}")
 
-# Get the 0.8-alpha cut
-lower_bound, upper_bound = arrested_nb_curve.cut(0.8)
-print(f"80% Confidence Interval for p (Arrested NB): [{lower_bound:.4f}, {upper_bound:.4f}]")
+# Get the alpha=1-0.9 cut (90% confidence interval)
+lower_bound, upper_bound = arrested_nb_curve.cut(1-0.9)
+print(f"90% Confidence Interval for p (Arrested NB): [{lower_bound:.4f}, {upper_bound:.4f}]")
 ```
 
 ### 5. Hypergeometric Confidence Curve
@@ -144,9 +144,9 @@ hypergeometric_curve = Hypergeometric(k=3, N=50, n=10)
 possibility_at_15 = hypergeometric_curve.possibility(15)
 print(f"Possibility of K=15 (Hypergeometric): {possibility_at_15:.4f}")
 
-# Get the 0.85-alpha cut
-lower_bound, upper_bound = hypergeometric_curve.cut(0.85)
-print(f"85% Confidence Interval for K (Hypergeometric): [{lower_bound:.4f}, {upper_bound:.4f}]")
+# Get the alpha=1-0.9 cut (90% confidence interval)
+lower_bound, upper_bound = hypergeometric_curve.cut(1-0.9)
+print(f"90% Confidence Interval for K (Hypergeometric): [{lower_bound:.4f}, {upper_bound:.4f}]")
 ```
 
 ### 6. Other Distributions
