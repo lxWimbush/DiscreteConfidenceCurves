@@ -151,3 +151,6 @@ print(f"85% Confidence Interval for K (Hypergeometric): [{lower_bound:.4f}, {upp
 
 ### 6. Other Distributions
 If you can identify the points of intersection and the relevant c-boxes that you will need for a sequence of observable outcomes, you can pass these to the general `ConfidenceCurve` class and use it to make alpha cuts and assign possibility. 
+
+### License
+This project is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either Version 3 of the License, or (at your option) any later version.
