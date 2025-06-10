@@ -1,8 +1,8 @@
 # Confidence Curves Library
 
-This Python library provides a robust framework for generating and analyzing **confidence curves**. A confidence curve can be considered analogous to a stack of nested confidence intervals, and provides a representation of the **possibility** of different parameter values for a given statistical distribution, based on observed data. 
+This Python library provides a robust framework for generating **confidence curves** for univariate cases of inference over discrete data. A confidence curve can be considered analogous to a stack of nested confidence intervals, and provides a representation of the **possibility** of different parameter values for a given statistical distribution, based on observed data. 
 
-The **converted** confidence curves in this script correct the conservatism that is inherent in simply **direct** curves developed by simply stacking confidence intervals directly from the confidence box (c-box). They also allow for belief assignment that is protected from false confidence.
+The **converted** confidence curves in this script follow the process described by Balch[^1], and correct the conservatism that is inherent in simply **direct** curves developed by simply stacking confidence intervals directly from the confidence box (c-box). They also allow for belief assignment that is protected from false confidence.
 
 Note that calculation can become extremely expensive when the size of the observable sequence of outcomes gets very large. For example with the binomial case, it can take a few minutes at the moment to generate the relevant curve for `n=1000`. In this case, the difference between the direct and converted curve is likely to be so small that it may make more sense to simply use the direct curve for computational efficiency.
 
@@ -154,3 +154,5 @@ If you can identify the points of intersection and the relevant c-boxes that you
 
 ### License
 This project is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either Version 3 of the License, or (at your option) any later version.
+
+[^1]: [Balch, M.S., 2020. New two-sided confidence intervals for binomial inference derived using Walley's imprecise posterior likelihood as a test statistic. International Journal of Approximate Reasoning, 123, pp.77-98.](https://www.sciencedirect.com/science/article/pii/S0888613X20301614)
