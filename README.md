@@ -2,11 +2,11 @@
 
 This Python library provides a robust framework for generating **confidence curves** for univariate cases of inference over discrete data. A confidence curve can be considered analogous to a stack of nested confidence intervals, and provides a representation of the **possibility** of different parameter values for a given statistical distribution, based on observed data. 
 
-The **converted** confidence curves in this script follow the process described by Balch[^1], and correct the conservatism that is inherent in simply **direct** curves developed by simply stacking confidence intervals directly from the confidence box (c-box). They also allow for belief assignment that is protected from false confidence.
+The **converted** confidence curves in this script follow the process described by Balch[^1], and correct the conservatism that is inherent in **direct** curves developed by simply stacking confidence intervals from the confidence box (c-box). They also allow for belief assignment that is protected from false confidence.
 
 Note that calculation can become extremely expensive when the size of the observable sequence of outcomes gets very large. For example with the binomial case, it can take a few minutes at the moment to generate the relevant curve for `n=1000`. In this case, the difference between the direct and converted curve is likely to be so small that it may make more sense to simply use the direct curve for computational efficiency.
 
-A test library of Singh plots is provided in `Testing.py`. Running this script should produce a series of valid Singh plots, and possibility values of endpoints that are less than `0.01` at each end. If this is not the case let me know!
+A test library of Singh plots is provided in `Testing.py`. Running this script from the root directory with `python -m tests.Testing` should produce a series of valid Singh plots[^2], and confidence intervals with endpoints that demonstrably have possibility values below 0.01. If this is not the case let me know!
 
 ---
 
@@ -53,7 +53,7 @@ Here are a few examples:
 Estimate the probability of success ($p$) given observed successes ($k$) and total trials ($n$).
 
 ```python
-from discocurves import Binomial
+from disco import Binomial
 
 # Observed: 7 successes (k) in 10 trials (n)
 # data = k (7), params = [n] ([10])
@@ -76,7 +76,7 @@ print(f"Possibility of p in [0.5, 0.7]: {possibility_interval:.4f}")
 Estimate the rate parameter ($\lambda$) given an observed count ($k$).
 
 ```python
-from discocurves import Poisson
+from disco import Poisson
 
 # Observed: 5 events (k)
 # data = k (5), params = [] (empty list as no fixed parameters)
@@ -94,7 +94,7 @@ print(f"90% Confidence Interval for lambda: [{lower_bound:.4f}, {upper_bound:.4f
 Estimate the probability of success ($p$) given a fixed number of successes ($k$) and the observed number of trials ($n$) required to achieve them.
 
 ```python
-from discocurves import NegativeBinomial
+from disco import NegativeBinomial
 
 # Observed: 12 trials (n) to get 5 successes (k)
 # data = n (12), params = [k, max_n] ([5, calculated_max_n])
@@ -114,7 +114,7 @@ print(f"90% Confidence Interval for p (Negative Binomial): [{lower_bound:.4f}, {
 This class is used when the process stops either after `max_k` successes or `max_n` trials. The data for this curve is a tuple `(k, n)`.
 
 ```python
-from discocurves import ArrestedNegativeBinomial
+from disco import ArrestedNegativeBinomial
 
 # Observed: 3 successes (k) after 8 trials (n)
 # Process stopped because max_k was 3 or max_n was 10. Here, max_k=3 was met.
@@ -134,7 +134,7 @@ print(f"90% Confidence Interval for p (Arrested NB): [{lower_bound:.4f}, {upper_
 Estimate the number of "successes" ($K$) in a finite population ($N$), given observed successes ($k$) in a sample of size ($n$).
 
 ```python
-from discocurves import Hypergeometric
+from disco import Hypergeometric
 
 # Observed: 3 successes (k) in a sample of 10 (n) from a population of 50 (N)
 # data = k (3), params = [N, n] ([50, 10])
@@ -155,4 +155,7 @@ If you can identify the points of intersection and the relevant c-boxes that you
 ### License
 This project is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either Version 3 of the License, or (at your option) any later version.
 
+### References
 [^1]: [Balch, M.S., 2020. New two-sided confidence intervals for binomial inference derived using Walley's imprecise posterior likelihood as a test statistic. International Journal of Approximate Reasoning, 123, pp.77-98.](https://www.sciencedirect.com/science/article/pii/S0888613X20301614)
+
+[^2]: [Wimbush, A., Gray, N. and Ferson, S., 2022. Singhing with confidence: visualising the performance of confidence procedures. Journal of Statistical Computation and Simulation, 92(13), pp.2686-2702.](https://www.tandfonline.com/doi/full/10.1080/00949655.2022.2044814)

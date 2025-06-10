@@ -1,4 +1,4 @@
-from discocurves import Hypergeometric, Poisson, Binomial, NegativeBinomial, ArrestedNegativeBinomial
+from disco import Hypergeometric, Poisson, Binomial, NegativeBinomial, ArrestedNegativeBinomial
 import numpy as np
 import scipy.stats as sps
 from scipy.special import beta, digamma, betaln, factorial, binom
@@ -42,17 +42,20 @@ for K in tqdm(range(N + 1)):
     if np.isnan(aps).any():
         break
     plt.plot(aps[-1], np.linspace(0, 1, NN), 'k', alpha=0.3)
+
 plt.plot(np.max(aps, axis=0), np.linspace(0, 1, NN), 'r')
 plt.plot([0, 1], [0, 1], 'k:')
 plt.ylim(0, 1)
 plt.xlim(0, 1)
-plt.title(r'$K\in\{{0, \dots, 100\}}, N=100, n=20k$')
+plt.title('Hypergeometric Case\n'+r'$K\in\{{0, \dots, 100\}}, N=100, n=20k$')
 plt.xlabel(r'Confidence Levels $1-\alpha$')
 plt.ylabel(r'Observed rate of coverage')
 plt.tight_layout()
 A = cacheddist_HG(N=N, n=n, k=10)
-print(A.cut(0.01))
-print(A.possibility(A.cut(0.01)[0]), A.possibility(A.cut(0.01)[1]))
+print('\nHypergeometric Case Example')
+print('Two-sided 99% Confidence interval given k=10, n=20, N=100:\n\t[{:1.3f}, {:1.3f}]'.format(*A.cut(0.01)))
+print('Corresponding endpoint possibility values:\n\t[{:1.3f}, {:1.3f}]'.format(A.possibility(A.cut(0.01)[0]), A.possibility(A.cut(0.01)[1])))
+plt.show()
 
 # PoissonTesting
 
@@ -95,15 +98,17 @@ plt.plot([0, 1], [0, 1], 'k:')
 plt.ylim(0, 1)
 plt.xlim(0, 1)
 
-plt.title(
+plt.title('Poisson Case\n'+
     r'$\lambda\in\{{0, 0.1, \dots, 19.9, 10\}}, N={:1.2e}, \overline{{k}}=\max(20, 20k)$'.format(N))
 plt.xlabel(r'Confidence Levels $1-\alpha$')
 plt.ylabel(r'Observed rate of coverage')
 plt.tight_layout()
 
 A = cacheddist_P(10)
-print(A.cut(0.01))
-print(A.possibility(A.cut(0.01)[0]), A.possibility(A.cut(0.01)[1]))
+print('anPoisson Case Example')
+print('Two-sided 99% Confidence interval given k=10:\n\t[{:1.3f}, {:1.3f}]'.format(*A.cut(0.01)))
+print('Corresponding endpoint possibility values:\n\t[{:1.3f}, {:1.3f}]'.format(A.possibility(A.cut(0.01)[0]), A.possibility(A.cut(0.01)[1])))
+plt.show()
 
 # Negative Binomial Testing
 
@@ -134,17 +139,20 @@ k = 4
 ms = np.zeros(N)
 ps = []
 for p in tqdm(np.linspace(0.1, 1, 50)):
-    ps += [np.sort(np.hstack([1 - cacheddist_NB(k,
-                                                int(d + k),
-                                                int(d + k) * 4).possibility(p) for d in sps.nbinom.rvs(p=p,
-                                                                                                       n=k,
-                                                                                                       size=N)]))]
+    ps += [np.sort(
+        np.hstack([
+            1 - cacheddist_NB(k,
+                              int(d + k),
+                              int(d + k) * 4
+                              ).possibility(p) 
+                              for d in sps.nbinom.rvs(p=p,n=k,size=N)]))]
+
 ms = np.max(ps, axis=0)
 plt.figure(figsize=[6, 3])
 plt.plot(ms, np.linspace(0, 1, N), 'r', linewidth=3)
-# plt.plot(tps, np.linspace(0,1,N), 'k', linewidth = 3)
 for p in range(50):
     plt.plot(ps[p], np.linspace(0, 1, N), 'k', alpha=0.3)
+
 plt.xlim(0, 1)
 plt.ylim(0, 1)
 plt.xlabel(r'Confidence Level $1-\alpha$')
@@ -152,15 +160,16 @@ plt.ylabel('Observed Rate of Coverage')
 plt.legend(labels=['Minimum Observed Coverage',
            r'$p\in\{0.50, 0.51, \dots, 0.99, 1\}$ Coverage'])
 plt.plot([0, 1], [0, 1], 'k:')
-plt.title(
+plt.title('Negative Binomial Case\n'+
     r'$k={:d}, p\in\{{0.50, 0.51, \dots, 0.99, 1\}}, \overline{{n}}=10n, N={:1.1e}$'.format(
         k,
         N))
 plt.tight_layout()
 A = cacheddist_NB(k=4, n=10, max_n=300)
-print(A.cut(0.01))
-print(A.possibility(A.cut(0.01)[0]), A.possibility(A.cut(0.01)[1]))
-
+print('\nNegative Binomial Case Example')
+print('Two-sided 99% Confidence interval given k=4, n=10, max_n=300:\n\t[{:1.3f}, {:1.3f}]'.format(*A.cut(0.01)))
+print('Corresponding endpoint possibility values:\n\t[{:1.3f}, {:1.3f}]'.format(A.possibility(A.cut(0.01)[0]), A.possibility(A.cut(0.01)[1])))
+plt.show()
 # Binomial testing
 
 
@@ -191,6 +200,7 @@ for i in tqdm(range(len(ps))):
         aps = np.vstack(
             (aps, np.sort([1 - cacheddist_B(d, n).possibility(ps[i]) for d in data[i]])))
         plt.plot(aps[-1], np.linspace(0, 1, N), 'k', alpha=0.3)
+
 plt.plot(np.max(aps, axis=0), np.linspace(0, 1, N), 'r')
 plt.plot([0, 1], [0, 1], 'k:')
 plt.xlim(0, 1)
@@ -200,13 +210,14 @@ plt.ylabel('Observed Rate of Coverage')
 plt.legend(labels=['Minimum Observed Coverage',
            r'$p\in\{0, 0.02, \dots, 0.98, 1\}$ Coverage'])
 plt.plot([0, 1], [0, 1], 'k:')
-plt.title(
+plt.title('Binomial Case\n'+
     r'$n={:d}, p\in\{{0.02, 0.04, \dots, 0.98, 1\}}, N={:1.1e}$'.format(n, N))
 plt.tight_layout()
 A = cacheddist_B(k=5, n=10)
-print(A.cut(0.01))
-print(A.possibility(A.cut(0.01)[0]), A.possibility(A.cut(0.01)[1]))
-
+print('\nBinomial Case Example')
+print('Two-sided 99% Confidence interval given k=5, n=10:\n\t[{:1.3f}, {:1.3f}]'.format(*A.cut(0.01)))
+print('Corresponding endpoint possibility values:\n\t[{:1.3f}, {:1.3f}]'.format(A.possibility(A.cut(0.01)[0]), A.possibility(A.cut(0.01)[1])))
+plt.show()
 
 @cache
 def cacheddist_ANB(
@@ -246,12 +257,14 @@ for p in tqdm(np.linspace(0, 1, 101)):
         ),
         max_n=max_n,
         max_k=k).possibility(p) for d in data]]
+
 ps = np.sort(ps, axis=1)
 ms = np.max(ps, axis=0)
 plt.figure(figsize=[6, 3])
 plt.plot(ms, np.linspace(0, 1, N), 'r', linewidth=3)
 for p in ps:
     plt.plot(p, np.linspace(0, 1, N), 'k', alpha=0.3)
+
 plt.xlim(0, 1)
 plt.ylim(0, 1)
 plt.xlabel(r'Confidence Level $1-\alpha$')
@@ -259,11 +272,14 @@ plt.ylabel('Observed Rate of Coverage')
 plt.legend(labels=['Minimum Observed Coverage',
            r'$p\in\{0.50, 0.51, \dots, 0.99, 1\}$ Coverage'])
 plt.plot([0, 1], [0, 1], 'k:')
-plt.title(
+plt.title('Arrested Negative Binomial Case\n'+
     r'$k={:d}, $'
     + r'$p\in\{{0.50, 0.51, \dots, 0.99, 1\}},$'
     + r'$\overline{{n}}=10n, N={:1.1e}$'.format(k, N))
+
 plt.tight_layout()
 A = cacheddist_ANB(k=k, n=max_n, max_n=max_n, max_k=k)
-print(A.cut(0.01))
-print(A.possibility(A.cut(0.01)[0]), A.possibility(A.cut(0.01)[1]))
+print('\nArrested Negative Binomial Case Example')
+print('Two-sided 99% Confidence interval given k=4, n=10, max_k=4, max_n=20:\n\t[{:1.3f}, {:1.3f}]'.format(*A.cut(0.01)))
+print('Corresponding endpoint possibility values:\n\t[{:1.3f}, {:1.3f}]'.format(A.possibility(A.cut(0.01)[0]), A.possibility(A.cut(0.01)[1])))
+plt.show()

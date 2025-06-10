@@ -991,7 +991,7 @@ class ArrestedNegativeBinomial(ConfidenceCurve):
                 def _intfun(x: float, *args: Tuple[int, int]) -> float:
                     """Helper function for root finding specific to k == max_k case."""
                     return (
-                        cdist(tuple(*args),  # cdist is used with tuple(*args) and (max_k, max_n) as params
+                        cdist(args,
                               # Upper bound PDF for alternative
                               (max_k, max_n))[1].pdf(x)
                         - cdist((k, n),
@@ -1032,7 +1032,7 @@ class ArrestedNegativeBinomial(ConfidenceCurve):
                 def _intfun(x: float, *args: Tuple[int, int]) -> float:
                     """Helper function for root finding specific to n == max_n case."""
                     return (
-                        cdist(tuple(*args),
+                        cdist(args,
                               # Lower bound PDF for alternative
                               (max_k, max_n))[0].pdf(x)
                         - cdist((k, n),
